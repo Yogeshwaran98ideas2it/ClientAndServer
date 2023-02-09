@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -16,9 +17,11 @@ import lombok.Data;
 public class UserAndRoleDto {
 
 	/** The user id. */
+	@NotNull
 	private int userId;
 	
 	/** The user name. */
+	@NotNull
 	private String userName;
 	
 	/** The created at. */
@@ -36,9 +39,11 @@ public class UserAndRoleDto {
 	
 	
 	/** The access. */
+	@NotNull
 	private String access;
 	
 	/** The role. */
+	@NotNull
 	private RoleDto role;
 	
 	

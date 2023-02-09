@@ -38,7 +38,7 @@ public class User {
 	private int userId;
 	
 	/** The user name. */
-	@NotNull
+	
 	@Column(name="user_name")
 	private String userName;
 	
