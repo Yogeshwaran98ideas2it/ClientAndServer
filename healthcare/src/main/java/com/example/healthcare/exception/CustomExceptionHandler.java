@@ -11,16 +11,19 @@ import com.example.healthcare.userandroledto.ResponseDto;
 
 import jakarta.validation.ConstraintViolationException;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CustomExceptionHandler.
  */
+/**
+ * @author Yogesh
+ *
+ */
 @RestControllerAdvice
 public class CustomExceptionHandler {
-	
+
 	/** The internal server error. */
-	private String INTERNAL_SERVER_ERROR="INTERNAL_SERVER_ERROR";
-	
+	private String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
+
 	/**
 	 * Handle validationt exception.
 	 *
@@ -29,15 +32,14 @@ public class CustomExceptionHandler {
 	 */
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(ConstraintViolationException.class)
-	  public ResponseDto handleValidationtException
-	  			(ConstraintViolationException ex) {
-		ResponseDto responseDto=new ResponseDto();
+	public ResponseDto handleValidationtException(ConstraintViolationException ex) {
+		ResponseDto responseDto = new ResponseDto();
 		responseDto.setErrorCode(INTERNAL_SERVER_ERROR);
 		responseDto.setFailure(INTERNAL_SERVER_ERROR, "Getting Constraint Voilation");
 		return responseDto;
-		
+
 	}
-	
+
 	/**
 	 * Handle validationt exception.
 	 *
@@ -46,17 +48,11 @@ public class CustomExceptionHandler {
 	 */
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(NoSuchElementException.class)
-	  public ResponseDto handleValidationtException
-	  			(NoSuchElementException ex) {
-		ResponseDto responseDto=new ResponseDto();
+	public ResponseDto handleValidationtException(NoSuchElementException ex) {
+		ResponseDto responseDto = new ResponseDto();
 		responseDto.setErrorCode(INTERNAL_SERVER_ERROR);
 		responseDto.setFailure(INTERNAL_SERVER_ERROR, "No Value present");
 		return responseDto;
 	}
-		
-	
-	
-	
-	
 
 }

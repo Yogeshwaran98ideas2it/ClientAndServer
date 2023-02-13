@@ -2,9 +2,13 @@ package com.example.healthcare.userandroledto;
 
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Instantiates a new response dto.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @Data
 public class ResponseDto  {

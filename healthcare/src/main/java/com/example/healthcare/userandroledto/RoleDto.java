@@ -2,9 +2,13 @@ package com.example.healthcare.userandroledto;
 
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Instantiates a new role dto.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @Data
 

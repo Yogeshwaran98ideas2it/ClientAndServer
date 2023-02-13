@@ -7,29 +7,28 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CustomModelMapping.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @Component
 public class CustomModelMapping extends ModelMapper {
 
-	 /**
- 	 * Map list.
- 	 *
- 	 * @param <D> the generic type
- 	 * @param source the source
- 	 * @param destinationType the destination type
- 	 * @return the list
- 	 */
- 	public <D> List<D> mapList(List<? extends Object> source, Class<D> destinationType) {
-		 List<D> tempSource=new ArrayList<D>();
-		 tempSource=source
-		 .stream()
-		 .map(element-> super
-		 .map(element,destinationType))
-		 .collect(Collectors.toList());
+	/**
+	 * Map list.
+	 *
+	 * @param <D>             the generic type
+	 * @param source          the source
+	 * @param destinationType the destination type
+	 * @return the list
+	 */
+	public <D> List<D> mapList(List<? extends Object> source, Class<D> destinationType) {
+		List<D> tempSource = new ArrayList<D>();
+		tempSource = source.stream().map(element -> super.map(element, destinationType)).collect(Collectors.toList());
 		return tempSource;
-	 }
-	 
+	}
+
 }

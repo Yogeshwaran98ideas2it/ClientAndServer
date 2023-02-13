@@ -2,9 +2,7 @@ package com.example.healthcare.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,12 +15,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
+
 /**
+ * 
  * Instantiates a new user.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @Data
 @Entity

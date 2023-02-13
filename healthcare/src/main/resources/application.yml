@@ -2,6 +2,14 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
     enabled: true
+  application:
+    name: cloudconfig
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      token: hvs.rbRZj1Rwf10BoDeAAubUa0h8
     
 management:
   security:

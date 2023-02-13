@@ -4,9 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class HealthcareApplication.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @SpringBootApplication
 @EnableJpaAuditing

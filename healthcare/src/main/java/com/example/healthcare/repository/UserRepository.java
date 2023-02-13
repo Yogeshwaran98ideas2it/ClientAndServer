@@ -7,6 +7,10 @@ import com.example.healthcare.entity.User;
 /**
  * The Interface UserRepository.
  */
+/**
+ * @author Yogesh
+ *
+ */
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 }

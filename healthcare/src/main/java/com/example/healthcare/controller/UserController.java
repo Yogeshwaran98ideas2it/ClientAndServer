@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +28,12 @@ import com.github.fge.jsonpatch.JsonPatchException;
 
 import jakarta.validation.Valid;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserController.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @RestController
 
@@ -41,17 +42,16 @@ import jakarta.validation.Valid;
 @RequestMapping("users/")
 public class UserController {
 
-
 	/** The user service. */
 	@Autowired
 	UserService userService;
-	
+
 	/** The value. */
 	@Value("${data}")
 	private String value;
-	
-	 /** The logger. */
- 	Logger logger = LoggerFactory.getLogger(UserController.class);
+
+	/** The logger. */
+	Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	/**
 	 * Gets the all user.
@@ -60,29 +60,30 @@ public class UserController {
 	 */
 	@GetMapping
 	public ResponseDto getAllUser() {
-		List<UserAndRoleDto> userAndRoleDto= userService.getAllUser();
-		logger.info("value:"+value);;
-		ResponseDto response=new ResponseDto();
-		if(!userAndRoleDto.isEmpty()) {
+		List<UserAndRoleDto> userAndRoleDto = userService.getAllUser();
+		logger.info( "Value is {}", value);
+		
+		ResponseDto response = new ResponseDto();
+		if (!userAndRoleDto.isEmpty()) {
 			response.setSuccess(userAndRoleDto, "List retrieved Successfully");
 		}
 		return response;
-				
+
 	}
-	
+
 	/**
 	 * List pageable.
 	 *
-	 * @param pageNo the page no
+	 * @param pageNo   the page no
 	 * @param pageSize the page size
 	 * @return the page
 	 */
 	@GetMapping("{pageNo}/{pageSize}")
 	public Page<UserAndRoleDto> listPageable(@PathVariable int pageNo, @PathVariable int pageSize) {
 		return userService.listPage(pageNo, pageSize);
-		
+
 	}
-	
+
 	/**
 	 * Gets the user by id.
 	 *
@@ -91,9 +92,9 @@ public class UserController {
 	 */
 	@GetMapping("{id}")
 	public ResponseDto getUserById(@PathVariable Integer id) {
-		Optional<UserAndRoleDto> userAndRoleDto=userService.getUserById(id);
-		ResponseDto response=new ResponseDto();
-		if(!userAndRoleDto.isEmpty()) {
+		Optional<UserAndRoleDto> userAndRoleDto = userService.getUserById(id);
+		ResponseDto response = new ResponseDto();
+		if (!userAndRoleDto.isEmpty()) {
 			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
 		}
 		return response;
@@ -105,11 +106,10 @@ public class UserController {
 	 * @param userAndRoleDto the user and role dto
 	 */
 	@PostMapping
-	public void createUser( @Valid @RequestBody UserAndRoleDto userAndRoleDto) {
+	public void createUser(@Valid @RequestBody UserAndRoleDto userAndRoleDto) {
 		userService.createUser(userAndRoleDto);
 	}
-	
-	
+
 	/**
 	 * Delete user by id.
 	 *
@@ -117,33 +117,34 @@ public class UserController {
 	 */
 	@DeleteMapping("{id}")
 	public void deleteUserById(@PathVariable Integer id) {
-		userService.deleteUserById(id);	
+		userService.deleteUserById(id);
 	}
-	
+
 	/**
 	 * Update user by id.
 	 *
 	 * @param userAndRoleDto the user and role dto
-	 * @param id the id
+	 * @param id             the id
 	 */
 	@PutMapping("{id}")
 	public void updateUserById(@Valid @RequestBody UserAndRoleDto userAndRoleDto, @PathVariable Integer id) {
 		userService.updateUserById(userAndRoleDto, id);
-		
+
 	}
-	
+
 	/**
 	 * Patch user by id.
 	 *
-	 * @param id the id
+	 * @param id        the id
 	 * @param JsonPatch the json patch
-	 * @throws JsonPatchException the json patch exception
+	 * @throws JsonPatchException      the json patch exception
 	 * @throws JsonProcessingException the json processing exception
 	 */
-	@PatchMapping(path="{id}",consumes = "application/json-patch+json")
-	public void patchUserById(@PathVariable Integer id, @RequestBody JsonPatch JsonPatch) throws JsonPatchException, JsonProcessingException {
-		
-		 userService.patchUserById(JsonPatch, id);
+	@PatchMapping(path = "{id}", consumes = "application/json-patch+json")
+	public void patchUserById(@PathVariable Integer id, @RequestBody JsonPatch JsonPatch)
+			throws JsonPatchException, JsonProcessingException {
+
+		userService.patchUserById(JsonPatch, id);
 	}
-	
+
 }

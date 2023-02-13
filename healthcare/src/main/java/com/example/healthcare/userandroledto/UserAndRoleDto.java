@@ -2,15 +2,17 @@ package com.example.healthcare.userandroledto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Component;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Instantiates a new user and role dto.
+ */
+/**
+ * @author Yogesh
+ *
  */
 @Data
 
