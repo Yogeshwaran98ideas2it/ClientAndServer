@@ -1,12 +1,12 @@
 spring:
   config:
-    import: optional:configserver:http://127.0.0.1:8888
+    import: optional:configserver:http://localhost:8888
     enabled: true
   application:
     name: cloudconfig
   cloud:
     vault:
-      host: 127.0.0.1
+      host: localhost
       port: 8200
       scheme: http
       authentication: TOKEN
