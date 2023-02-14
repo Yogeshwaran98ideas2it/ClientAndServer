@@ -6,10 +6,11 @@ spring:
     name: cloudconfig
   cloud:
     vault:
-      host: localhost
+      host: 127.0.0.1
       port: 8200
       scheme: http
-      token: hvs.NdnU9y1h91vr9a6REv86m0L8
+      authentication: TOKEN
+      token: hvs.vDKhcr2lL2qjog6vkKY1hb4l
     
 management:
   security:
