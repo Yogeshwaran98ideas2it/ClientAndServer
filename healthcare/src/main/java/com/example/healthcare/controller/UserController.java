@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.healthcare.entity.User;
+import com.example.healthcare.repository.UserRepository;
 import com.example.healthcare.service.UserService;
 import com.example.healthcare.userandroledto.ResponseDto;
 import com.example.healthcare.userandroledto.UserAndRoleDto;
@@ -39,12 +42,17 @@ import jakarta.validation.Valid;
 
 @RefreshScope
 
-@RequestMapping("users/")
+@RequestMapping("users")
 public class UserController {
 
 	/** The user service. */
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	
 
 	/** The value. */
 	@Value("${data}")
@@ -70,6 +78,17 @@ public class UserController {
 		return response;
 
 	}
+	
+	//Gets all the user
+	
+	//Implemented in EntityManager
+	/*
+	 * @GetMapping public ResponseDto getAllUsers() { List<UserAndRoleDto>
+	 * userAndRoleDto = userService.getAllUsers(); ResponseDto response = new
+	 * ResponseDto(); if (!userAndRoleDto.isEmpty()) {
+	 * response.setSuccess(userAndRoleDto, "List retrieved Successfully"); } return
+	 * response; }
+	 */
 
 	/**
 	 * List pageable.
@@ -78,7 +97,7 @@ public class UserController {
 	 * @param pageSize the page size
 	 * @return the page
 	 */
-	@GetMapping("{pageNo}/{pageSize}")
+	@GetMapping("/{pageNo}/{pageSize}")
 	public Page<UserAndRoleDto> listPageable(@PathVariable int pageNo, @PathVariable int pageSize) {
 		return userService.listPage(pageNo, pageSize);
 
@@ -90,7 +109,7 @@ public class UserController {
 	 * @param id the id
 	 * @return the user by id
 	 */
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
 	public ResponseDto getUserById(@PathVariable Integer id) {
 		Optional<UserAndRoleDto> userAndRoleDto = userService.getUserById(id);
 		ResponseDto response = new ResponseDto();
@@ -98,6 +117,18 @@ public class UserController {
 			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
 		}
 		return response;
+	}
+	
+	@GetMapping("/name")
+	public ResponseDto findByName(@RequestParam(value = "userName") String userName) {
+		logger.info("inside name method");
+		Optional<User> userAndRoleDto=Optional.ofNullable(userRepository.findByUserName(userName));
+		ResponseDto response = new ResponseDto();
+		if (!userAndRoleDto.isEmpty()) {
+			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
+		}
+		return response;
+		
 	}
 
 	/**
@@ -115,7 +146,7 @@ public class UserController {
 	 *
 	 * @param id the id
 	 */
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public void deleteUserById(@PathVariable Integer id) {
 		userService.deleteUserById(id);
 	}
@@ -126,7 +157,7 @@ public class UserController {
 	 * @param userAndRoleDto the user and role dto
 	 * @param id             the id
 	 */
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public void updateUserById(@Valid @RequestBody UserAndRoleDto userAndRoleDto, @PathVariable Integer id) {
 		userService.updateUserById(userAndRoleDto, id);
 
@@ -140,7 +171,7 @@ public class UserController {
 	 * @throws JsonPatchException      the json patch exception
 	 * @throws JsonProcessingException the json processing exception
 	 */
-	@PatchMapping(path = "{id}", consumes = "application/json-patch+json")
+	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
 	public void patchUserById(@PathVariable Integer id, @RequestBody JsonPatch JsonPatch)
 			throws JsonPatchException, JsonProcessingException {
 

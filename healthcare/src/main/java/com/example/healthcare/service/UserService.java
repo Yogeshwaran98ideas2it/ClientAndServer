@@ -3,6 +3,8 @@ package com.example.healthcare.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,9 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.healthcare.controller.UserController;
 import com.example.healthcare.entity.User;
 import com.example.healthcare.mapper.CustomModelMapping;
 import com.example.healthcare.repository.UserRepository;
+import com.example.healthcare.repository.UserRoleRepository;
 import com.example.healthcare.userandroledto.UserAndRoleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -44,9 +48,14 @@ public class UserService implements UserInterface {
 	@Autowired
 	private CustomModelMapping modelMapper;
 	
+	@Autowired
+	UserRoleRepository userRoleRepository;
+	
 	/** The object mapper. */
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	
 
@@ -87,6 +96,17 @@ public class UserService implements UserInterface {
 		 */
 		return modelMapper.mapList(userRepository.findAll(), UserAndRoleDto.class);
 	}
+	
+	//Gets all the user
+	
+	//Implemented by EntityManager
+	
+	/*
+	 * public List<UserAndRoleDto> getAllUsers() { return
+	 * modelMapper.mapList(userRoleRepository.findAllUsers(), UserAndRoleDto.class);
+	 * }
+	 */
+	
 
 	/**
 	 * Creates the user.
@@ -111,12 +131,29 @@ public class UserService implements UserInterface {
 	@Override
 	@Transactional
 	public Optional<UserAndRoleDto> getUserById(Integer userId) {
-		System.out.println(userId);
-		System.out.println(userRepository.findById(userId).get());
-		UserAndRoleDto userAndRoleDto = modelMapper.map(userRepository.findById(userId).get(), UserAndRoleDto.class);
+		logger.info("{}",userId);
+		UserAndRoleDto userAndRoleDto;
+		
+		logger.info("{}",userRepository.findById(userId).get());
+		
+		userAndRoleDto = modelMapper.map(userRepository.findById(userId).get(), UserAndRoleDto.class);
+		
 		System.out.println(userAndRoleDto.toString());
 		return Optional.ofNullable(userAndRoleDto);
+		
+		
+		
 	}
+	
+	@Transactional
+	public Optional<UserAndRoleDto> findByUserName(String userName){
+		logger.info("inside name service method");
+		logger.info("{}",userRepository.findByUserName(userName));
+		UserAndRoleDto userAndRoleDto=modelMapper.map(userRepository.findByUserName(userName), UserAndRoleDto.class);
+		return Optional.ofNullable(userAndRoleDto);
+	}
+	
+	
 
 	/**
 	 * Delete user by id.
