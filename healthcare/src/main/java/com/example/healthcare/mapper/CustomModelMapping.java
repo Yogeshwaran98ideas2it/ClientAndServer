@@ -26,9 +26,9 @@ public class CustomModelMapping extends ModelMapper {
 	 * @return the list
 	 */
 	public <D> List<D> mapList(List<? extends Object> source, Class<D> destinationType) {
-		List<D> tempSource = new ArrayList<D>();
-		tempSource = source.stream().map(element -> super.map(element, destinationType)).collect(Collectors.toList());
-		return tempSource;
+		 
+		 
+		return source.stream().map(element -> super.map(element, destinationType)).collect(Collectors.toList());
 	}
 
 }

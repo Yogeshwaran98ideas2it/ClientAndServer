@@ -1,12 +1,10 @@
 package com.example.healthcare.repository;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import com.example.healthcare.entity.User;
-import com.example.healthcare.userandroledto.UserAndRoleDto;
 
 /**
  * The Interface UserRepository.
@@ -17,8 +15,10 @@ import com.example.healthcare.userandroledto.UserAndRoleDto;
  */
 
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface IUserRepository extends JpaRepository<User, Integer> {
 
 	
 	User findByUserName(String userName);
+	List<User> findByUserAccess(String access);
+	
 }

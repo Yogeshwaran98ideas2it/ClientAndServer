@@ -3,7 +3,8 @@ package com.example.healthcare.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.healthcare.userandroledto.UserAndRoleDto;
+import com.example.healthcare.dto.RoleDto;
+import com.example.healthcare.dto.UserAndRoleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
@@ -15,7 +16,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
  * @author Yogesh
  *
  */
-public interface UserInterface {
+public interface IUserService {
 
 	/**
 	 * Gets the all user.
@@ -65,7 +66,15 @@ public interface UserInterface {
 	 * @throws JsonProcessingException  the json processing exception
 	 * @throws IllegalArgumentException the illegal argument exception
 	 */
-	// public void patchUserById(UserAndRoleDto userAndRoleDto, Integer userId);
+
 	public Optional<UserAndRoleDto> patchUserById(JsonPatch jsonPatch, Integer userId)
 			throws JsonPatchException, JsonProcessingException, IllegalArgumentException;
+	
+	public List<RoleDto> findByUserTiming(String timing);
+	
+	public List<UserAndRoleDto> findByUserAccess(String access);
+	
+	public Optional<RoleDto> findByRoleName(String roleName);
+	
+	public Optional<UserAndRoleDto> findByUserName(String userName);
 }

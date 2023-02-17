@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -19,7 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "role")
-
+@NamedQuery(name="Role.findByName",query="from Role where roleName=?1")
 public class Role {
 
 	/** The role id. */

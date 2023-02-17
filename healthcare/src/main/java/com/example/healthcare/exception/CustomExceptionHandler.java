@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.healthcare.userandroledto.ResponseDto;
+import com.example.healthcare.dto.ResponseDto;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintViolationException;
 public class CustomExceptionHandler {
 
 	/** The internal server error. */
-	private String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
+	private String internalServerError = "INTERNAL_SERVER_ERROR";
 
 	/**
 	 * Handle validationt exception.
@@ -34,8 +34,8 @@ public class CustomExceptionHandler {
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseDto handleValidationtException(ConstraintViolationException ex) {
 		ResponseDto responseDto = new ResponseDto();
-		responseDto.setErrorCode(INTERNAL_SERVER_ERROR);
-		responseDto.setFailure(INTERNAL_SERVER_ERROR, "Getting Constraint Voilation");
+		responseDto.setErrorCode(internalServerError);
+		responseDto.setFailure(internalServerError, "Getting Constraint Voilation");
 		return responseDto;
 
 	}
@@ -50,8 +50,8 @@ public class CustomExceptionHandler {
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseDto handleValidationtException(NoSuchElementException ex) {
 		ResponseDto responseDto = new ResponseDto();
-		responseDto.setErrorCode(INTERNAL_SERVER_ERROR);
-		responseDto.setFailure(INTERNAL_SERVER_ERROR, "No Value present");
+		responseDto.setErrorCode(internalServerError);
+		responseDto.setFailure(internalServerError, "No Value present");
 		return responseDto;
 	}
 

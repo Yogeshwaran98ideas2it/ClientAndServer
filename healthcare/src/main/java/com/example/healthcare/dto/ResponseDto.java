@@ -1,4 +1,4 @@
-package com.example.healthcare.userandroledto;
+package com.example.healthcare.dto;
 
 import lombok.Data;
 

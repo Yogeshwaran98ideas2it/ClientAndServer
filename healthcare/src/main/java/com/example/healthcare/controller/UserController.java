@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.healthcare.entity.User;
-import com.example.healthcare.repository.UserRepository;
+import com.example.healthcare.dto.ResponseDto;
+import com.example.healthcare.dto.RoleDto;
+import com.example.healthcare.dto.UserAndRoleDto;
+import com.example.healthcare.repository.IUserRepository;
 import com.example.healthcare.service.UserService;
-import com.example.healthcare.userandroledto.ResponseDto;
-import com.example.healthcare.userandroledto.UserAndRoleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
@@ -50,7 +50,7 @@ public class UserController {
 	UserService userService;
 	
 	@Autowired
-	UserRepository userRepository;
+	IUserRepository userRepository;
 	
 	
 
@@ -122,7 +122,7 @@ public class UserController {
 	@GetMapping("/name")
 	public ResponseDto findByName(@RequestParam(value = "userName") String userName) {
 		logger.info("inside name method");
-		Optional<User> userAndRoleDto=Optional.ofNullable(userRepository.findByUserName(userName));
+		Optional<UserAndRoleDto> userAndRoleDto=userService.findByUserName(userName);
 		ResponseDto response = new ResponseDto();
 		if (!userAndRoleDto.isEmpty()) {
 			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
@@ -130,6 +130,44 @@ public class UserController {
 		return response;
 		
 	}
+	
+	
+	
+	@GetMapping("/role")
+	public ResponseDto findByRoleName(@RequestParam(value = "roleName") String roleName) {
+		logger.info("inside name method");
+		Optional<RoleDto> roleDto=userService.findByRoleName(roleName);
+		ResponseDto response = new ResponseDto();
+		if (!roleDto.isEmpty()) {
+			response.setSuccess(roleDto, "role retrieved Successfully");
+		}
+		return response;
+		
+	}
+	
+	@GetMapping("/access")
+	public ResponseDto findByUserAccess(@RequestParam(value = "access") String access) {
+		logger.info("inside name method");
+		List<UserAndRoleDto> userAndRoleDto=userService.findByUserAccess(access);
+		ResponseDto response = new ResponseDto();
+		if (!userAndRoleDto.isEmpty()) {
+			response.setSuccess(userAndRoleDto, "Users retrieved Successfully");
+		}
+		return response;
+		
+	}
+	@GetMapping("/timing")
+	public ResponseDto findByUserTiming(@RequestParam(value = "timing") String timing) {
+		logger.info("inside name method");
+		List<RoleDto> userAndRoleDto=userService.findByUserTiming(timing);
+		ResponseDto response = new ResponseDto();
+		if (!userAndRoleDto.isEmpty()) {
+			response.setSuccess(userAndRoleDto, "Users retrieved Successfully");
+		}
+		return response;
+		
+	}
+	
 
 	/**
 	 * Creates the user.

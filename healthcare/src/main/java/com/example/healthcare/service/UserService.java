@@ -14,12 +14,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.healthcare.controller.UserController;
+import com.example.healthcare.dto.RoleDto;
+import com.example.healthcare.dto.UserAndRoleDto;
 import com.example.healthcare.entity.User;
 import com.example.healthcare.mapper.CustomModelMapping;
-import com.example.healthcare.repository.UserRepository;
+import com.example.healthcare.repository.IRoleRepository;
+import com.example.healthcare.repository.IUserRepository;
 import com.example.healthcare.repository.UserRoleRepository;
-import com.example.healthcare.userandroledto.UserAndRoleDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class UserService.
  */
@@ -38,11 +39,14 @@ import com.github.fge.jsonpatch.JsonPatchException;
  */
 @Service
 
-public class UserService implements UserInterface {
+public class UserService implements IUserService {
 
 	/** The user repository. */
 	@Autowired
-	private UserRepository userRepository;
+	private IUserRepository userRepository;
+	
+	@Autowired
+	private IRoleRepository roleRepository;
 
 	/** The model mapper. */
 	@Autowired
@@ -52,8 +56,7 @@ public class UserService implements UserInterface {
 	UserRoleRepository userRoleRepository;
 	
 	/** The object mapper. */
-	@Autowired
-	private ObjectMapper objectMapper;
+	
 	
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
@@ -147,13 +150,35 @@ public class UserService implements UserInterface {
 	
 	@Transactional
 	public Optional<UserAndRoleDto> findByUserName(String userName){
-		logger.info("inside name service method");
+		logger.info("inside User name service method");
 		logger.info("{}",userRepository.findByUserName(userName));
 		UserAndRoleDto userAndRoleDto=modelMapper.map(userRepository.findByUserName(userName), UserAndRoleDto.class);
 		return Optional.ofNullable(userAndRoleDto);
 	}
 	
+	@Transactional
+	public Optional<RoleDto> findByRoleName(String roleName){
+		logger.info("inside Role name service method");
+		logger.info("{}",roleRepository.findByRoleName(roleName));
+		RoleDto roleDto=modelMapper.map(roleRepository.findByRoleName(roleName), RoleDto.class);
+		return Optional.ofNullable(roleDto);
+	}
 	
+	@Transactional
+	public List<UserAndRoleDto> findByUserAccess(String access){
+		logger.info("inside name service method");
+
+		
+		return modelMapper.mapList(userRepository.findByUserAccess(access), UserAndRoleDto.class);
+	}
+	
+	@Transactional
+	public List<RoleDto> findByUserTiming(String timing){
+		logger.info("inside name service method");
+
+		
+		return modelMapper.mapList(roleRepository.findByTiming(timing), RoleDto.class);
+	}
 
 	/**
 	 * Delete user by id.
@@ -246,7 +271,8 @@ public class UserService implements UserInterface {
 	 */
 	private User applyPatchToCustomer(JsonPatch jsonPatch, User user) throws IllegalArgumentException, JsonPatchException, JsonProcessingException {
 		ObjectMapper om=new ObjectMapper();
-		//ObjectMapper om=JsonMapper.builder().findAndAddModules().build();
+		
+		//ObjectMapper om=JsonMapper.builder().findAndAddModules().build();**Commented this code in favor of below lines
 		om.registerModule(new JavaTimeModule());//Jackson will serialize the Date to a timestamp format by default (number of milliseconds since the date, UTC).
 		om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);//so disabling the feature will handle the error when localdatetime is used
 		JsonNode patched= jsonPatch.apply(//apply method will apply the operations to target.
@@ -254,8 +280,8 @@ public class UserService implements UserInterface {
 						user, JsonNode.class
 						)
 				);
-		User updated = om.treeToValue(patched, User.class);//binds the data in the patched com.fasterxml.jackson.databind.JsonNode to the Customer type
-        return updated;
+		
+        return om.treeToValue(patched, User.class); //binds the data in the patched com.fasterxml.jackson.databind.JsonNode to the Customer type
 	}
 
 	/**
@@ -272,18 +298,20 @@ public class UserService implements UserInterface {
 
 		Page<User> pagedResult = userRepository.findAll(paging);
 
-		System.out.println("PagedResult:" + pagedResult.toString());
+		logger.info("PagedResult:{}" , pagedResult);
 
 		 List <User> listSavedUser= pagedResult.getContent();
-		// System.out.println(listSavedUser.toString());
-		// List <UserAndRoleDto> listUser=new ArrayList<UserAndRoleDto>();
-
-//		listSavedUser.stream().forEach((userList)->listUser.add(Usermapper.autoMAPPER.mapToUserDto(userList)));
-//		System.out.println(listUser.toString());
-		Page<UserAndRoleDto> pageUser = new PageImpl<UserAndRoleDto>(
+			/*
+			 * System.out.println(listSavedUser.toString()); List <UserAndRoleDto>
+			 * listUser=new ArrayList<UserAndRoleDto>();
+			 * 
+			 * listSavedUser.stream().forEach((userList)->listUser.add(Usermapper.autoMAPPER
+			 * .mapToUserDto(userList))); System.out.println(listUser.toString());
+			 */
+		Page<UserAndRoleDto> pageUser = new PageImpl<>(
 				modelMapper.mapList(listSavedUser, UserAndRoleDto.class));
 
-		System.out.println(pageUser.getContent().toString());
+		logger.info(pageUser.getContent().toString());
 		return pageUser;
 	}
 
