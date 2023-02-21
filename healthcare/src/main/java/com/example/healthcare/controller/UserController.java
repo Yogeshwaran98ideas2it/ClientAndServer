@@ -1,5 +1,6 @@
 package com.example.healthcare.controller;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -158,6 +159,7 @@ public class UserController {
 	}
 	@GetMapping("/timing")
 	public ResponseDto findByUserTiming(@RequestParam(value = "timing") String timing) {
+		SecureRandom random =new SecureRandom();
 		logger.info("inside name method");
 		List<RoleDto> userAndRoleDto=userService.findByUserTiming(timing);
 		ResponseDto response = new ResponseDto();

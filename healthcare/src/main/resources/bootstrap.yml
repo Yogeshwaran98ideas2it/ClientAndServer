@@ -1,0 +1,23 @@
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+   
+  application:
+    name: healthcare
+  cloud:
+    vault:
+      host: 127.0.0.1
+      port: 8200
+      scheme: http
+      authentication: TOKEN
+      token: hvs.LttEFhi1Iuz0QoLn3SmUFygV
+  
+    
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+       
