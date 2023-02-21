@@ -1,5 +1,6 @@
 package com.example.healthcare.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +45,10 @@ import com.github.fge.jsonpatch.JsonPatchException;
  */
 @Service
 
-public class UserService implements IUserService {
+public class UserService implements IUserService,UserDetailsService {
 
 	/** The user repository. */
-	@Autowired
+	
 	private IUserRepository userRepository;
 	
 	@Autowired
@@ -55,11 +61,17 @@ public class UserService implements IUserService {
 	@Autowired
 	UserRoleRepository userRoleRepository;
 	
+	PasswordEncoder passwordEncoder;
+	
 	/** The object mapper. */
 	
 	
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
+	public UserService(IUserRepository iUserRepository) {
+		this.userRepository=iUserRepository;
+		this.passwordEncoder=new BCryptPasswordEncoder();
+	}
 	
 
 	/**
@@ -122,6 +134,8 @@ public class UserService implements IUserService {
 	public Optional<UserAndRoleDto> createUser(UserAndRoleDto userAndRoleDto) {
 		User user = modelMapper.map(userAndRoleDto, User.class);
 		User savedUser = userRepository.save(user);
+		String encodedPassword=this.passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		return Optional.ofNullable(modelMapper.map(savedUser, UserAndRoleDto.class));
 	}
 
@@ -206,6 +220,8 @@ public class UserService implements IUserService {
 		Optional<User> userPresent = userRepository.findById(userId);
 		if (!userPresent.isEmpty()) {
 			user.setCreatedAt(userPresent.get().getCreatedAt());
+			String encodedPassword=this.passwordEncoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
 			userRepository.save(user);
 		}
 
@@ -226,7 +242,9 @@ public class UserService implements IUserService {
 		
 		Optional<User> user=userRepository.findById(userId);
 		User applyPatch=applyPatchToCustomer(jsonPatch,user.get());
-		if(user.isPresent()) {
+		if(!user.isEmpty()) {
+			String encodedPassword=this.passwordEncoder.encode(user.get().getPassword());
+			user.get().setPassword(encodedPassword);
 			return Optional.ofNullable(modelMapper.map(userRepository.save(applyPatch)	, UserAndRoleDto.class));
 		}
 		else
@@ -313,6 +331,13 @@ public class UserService implements IUserService {
 
 		logger.info(pageUser.getContent().toString());
 		return pageUser;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+		User user=userRepository.findByUserName(username);
+		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), new ArrayList<>());
 	}
 
 	

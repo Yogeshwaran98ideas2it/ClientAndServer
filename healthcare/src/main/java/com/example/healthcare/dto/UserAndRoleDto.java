@@ -26,6 +26,9 @@ public class UserAndRoleDto {
 	@NotNull
 	private String userName;
 	
+	@NotNull
+	private String password;
+	
 	/** The created at. */
 	private LocalDateTime createdAt;
 	

@@ -49,6 +49,8 @@ public class User {
 	@Column(name="user_name")
 	private String userName;
 	
+	private String password;
+	
 	/** The created at. */
 	@CreatedDate
 	@Column(name="created_at")
@@ -77,5 +79,6 @@ public class User {
 	@JoinColumn(name="roleId")
 	Role role;
 
-		
+	
+	
 }
