@@ -1,10 +1,18 @@
 package com.example.healthcare.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +41,7 @@ import lombok.Data;
 @Table(name="user")
 @EntityListeners(AuditingEntityListener.class)
 @NamedQueries({@NamedQuery(name="User.findByName",query="from User where userName=?1"),@NamedQuery(name="User.findByUserAccess",query="from User where access=?1")})
-
-
-public class User {
+public class User implements UserDetails{
 
 	/** The user id. */
 	@Id
@@ -77,7 +83,46 @@ public class User {
 	/** The role. */
 	@ManyToOne
 	@JoinColumn(name="roleId")
+
 	Role role;
+
+
+
+	@Override
+	public String getUsername() {
+		
+		return this.userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		
+		return false;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	

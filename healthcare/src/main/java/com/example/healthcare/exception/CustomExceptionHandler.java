@@ -3,9 +3,11 @@ package com.example.healthcare.exception;
 import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
 
 import com.example.healthcare.dto.ResponseDto;
 
@@ -39,6 +41,18 @@ public class CustomExceptionHandler {
 		return responseDto;
 
 	}
+	
+	
+	  @ResponseStatus(HttpStatus.FORBIDDEN)
+	  
+	  @ExceptionHandler(Forbidden.class) 
+	  public ResponseDto  handleValidationtException(Forbidden ex) { ResponseDto responseDto = new
+	  ResponseDto(); responseDto.setErrorCode("Forbidden Error");
+	  responseDto.setFailure("Forbidden Error", "Forbidden Error Occured");
+	  return responseDto;
+	  
+	  }
+	 
 
 	/**
 	 * Handle validationt exception.

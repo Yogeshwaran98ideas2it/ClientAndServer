@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.healthcare.dto.ResponseDto;
 import com.example.healthcare.dto.RoleDto;
 import com.example.healthcare.dto.UserAndRoleDto;
+import com.example.healthcare.entity.AuthRequest;
+import com.example.healthcare.jwt.JwtUtil;
 import com.example.healthcare.repository.IUserRepository;
 import com.example.healthcare.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,6 +57,12 @@ public class UserController {
 	
 	@Autowired
 	IUserRepository userRepository;
+	
+	@Autowired
+	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	
 
@@ -216,6 +227,27 @@ public class UserController {
 			throws JsonPatchException, JsonProcessingException {
 
 		userService.patchUserById(JsonPatch, id);
+	}
+	
+	
+	
+	@PostMapping("/authenticate")
+	public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+		try {
+		Authentication authentication=authenticationManager.authenticate( 
+				new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
+				);
+		if(authentication.isAuthenticated()) {
+			logger.info("Authenticate:{}",authentication);
+		}
+		
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		
+		return jwtUtil.generateToken(authRequest.getUserName());
+		
 	}
 
 }

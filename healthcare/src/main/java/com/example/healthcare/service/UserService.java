@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,7 +49,7 @@ import com.github.fge.jsonpatch.JsonPatchException;
 public class UserService implements IUserService,UserDetailsService {
 
 	/** The user repository. */
-	
+	@Autowired
 	private IUserRepository userRepository;
 	
 	@Autowired
@@ -61,6 +62,7 @@ public class UserService implements IUserService,UserDetailsService {
 	@Autowired
 	UserRoleRepository userRoleRepository;
 	
+	
 	PasswordEncoder passwordEncoder;
 	
 	/** The object mapper. */
@@ -68,8 +70,8 @@ public class UserService implements IUserService,UserDetailsService {
 	
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
-	public UserService(IUserRepository iUserRepository) {
-		this.userRepository=iUserRepository;
+	public UserService() {
+		
 		this.passwordEncoder=new BCryptPasswordEncoder();
 	}
 	
@@ -109,6 +111,7 @@ public class UserService implements IUserService,UserDetailsService {
 		 * 
 		 * System.out.println("Listuser:: " + listUser);
 		 */
+		
 		return modelMapper.mapList(userRepository.findAll(), UserAndRoleDto.class);
 	}
 	
@@ -148,10 +151,12 @@ public class UserService implements IUserService,UserDetailsService {
 	@Override
 	@Transactional
 	public Optional<UserAndRoleDto> getUserById(Integer userId) {
-		logger.info("{}",userId);
+		System.out.println("Method1");
+		logger.info("userId:{}",userId);
 		UserAndRoleDto userAndRoleDto;
 		
 		logger.info("{}",userRepository.findById(userId).get());
+		
 		
 		userAndRoleDto = modelMapper.map(userRepository.findById(userId).get(), UserAndRoleDto.class);
 		
@@ -178,6 +183,8 @@ public class UserService implements IUserService,UserDetailsService {
 		return Optional.ofNullable(roleDto);
 	}
 	
+	
+	
 	@Transactional
 	public List<UserAndRoleDto> findByUserAccess(String access){
 		logger.info("inside name service method");
@@ -202,6 +209,7 @@ public class UserService implements IUserService,UserDetailsService {
 	@Override
 	@Transactional
 	public void deleteUserById(Integer userId) {
+		System.out.println("Method2");
 		userRepository.deleteById(userId);
 
 	}
@@ -335,9 +343,22 @@ public class UserService implements IUserService,UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+		try {
+			System.out.println("Method3");
 		User user=userRepository.findByUserName(username);
-		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), new ArrayList<>());
+		String userName=user.getUsername();
+		String passWord=this.passwordEncoder.encode(user.getPassword());
+		
+		logger.info("userName:{}",userName);
+		logger.info("password:{}",passWord);
+		final List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
+		return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authorities);
+		}
+		catch(Exception e) {
+			logger.info("{}",e);
+		}
+		return null;
 	}
 
 	
