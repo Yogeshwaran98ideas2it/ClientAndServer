@@ -101,7 +101,7 @@ public class SecureConfig {
 //		.permitAll()
 		.requestMatchers(allowedApi)
 //		.permitAll()
-		.hasAnyAuthority("Engineer",           "Nurse")
+		.hasAnyAuthority("Engineer","Nurse")
 		.anyRequest()
 		.authenticated()
 		.and()

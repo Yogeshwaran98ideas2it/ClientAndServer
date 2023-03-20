@@ -1,7 +1,10 @@
 spring:
+  
+       
   config:
     import: optional:configserver:http://localhost:8888
-   
+  cache:
+    type: redis   
   application:
     name: healthcare
   cloud:
@@ -10,7 +13,9 @@ spring:
       port: 8200
       scheme: http
       authentication: TOKEN
-      token: hvs.A0KdE71SBonRzva0AGRtXdv4
+      token: hvs.N06mwxVHBpZHw3ydAPILC482
+
+   
   
     
 management:

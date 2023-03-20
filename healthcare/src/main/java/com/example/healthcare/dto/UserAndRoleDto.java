@@ -1,5 +1,6 @@
 package com.example.healthcare.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ import lombok.Data;
  */
 @Data
 
-public class UserAndRoleDto {
+public class UserAndRoleDto implements Serializable{
 
 	/** The user id. */
 	@NotNull

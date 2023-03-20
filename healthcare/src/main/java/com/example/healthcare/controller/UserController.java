@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -122,12 +123,17 @@ public class UserController {
 	 * @return the user by id
 	 */
 	@GetMapping("/{id}")
+	@Cacheable(value="User",key="#id")
 	public ResponseDto getUserById(@PathVariable Integer id) {
 		Optional<UserAndRoleDto> userAndRoleDto = userService.getUserById(id);
 		ResponseDto response = new ResponseDto();
 		if (!userAndRoleDto.isEmpty()) {
 			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
 		}
+		else {
+			response.setFailure("User id not available", "User value not retrieved ");
+		}
+		System.out.println("error2");
 		return response;
 	}
 	

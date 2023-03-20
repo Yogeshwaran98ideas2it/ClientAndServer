@@ -1,5 +1,7 @@
 package com.example.healthcare.dto;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 
@@ -12,7 +14,7 @@ import lombok.Data;
  */
 @Data
 
-public class RoleDto {
+public class RoleDto implements Serializable{
 
 	/** The role id. */
 	private int roleId;

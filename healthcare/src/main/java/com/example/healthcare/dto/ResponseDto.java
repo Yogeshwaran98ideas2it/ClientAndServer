@@ -1,5 +1,7 @@
 package com.example.healthcare.dto;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 
@@ -11,7 +13,7 @@ import lombok.Data;
  *
  */
 @Data
-public class ResponseDto  {
+public class ResponseDto  implements  Serializable{
 
 	/** The status. */
 	private String status;
@@ -49,5 +51,6 @@ public class ResponseDto  {
 		
 		this.message=message;
 		this.errorCode=errorCode;
+		
 	}
 }

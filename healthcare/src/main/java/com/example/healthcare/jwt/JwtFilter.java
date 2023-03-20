@@ -4,6 +4,7 @@
 package com.example.healthcare.jwt;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			}
 			
 		}
+		System.out.println("filter method");
 			
 		filterChain.doFilter(request, response);
 		
