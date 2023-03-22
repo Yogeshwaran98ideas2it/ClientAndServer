@@ -19,6 +19,11 @@ import lombok.Data;
 
 public class UserAndRoleDto implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1080345931746543422L;
+
 	/** The user id. */
 	@NotNull
 	private int userId;

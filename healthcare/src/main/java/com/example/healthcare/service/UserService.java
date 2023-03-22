@@ -26,7 +26,7 @@ import com.example.healthcare.dto.UserAndRoleDto;
 import com.example.healthcare.entity.User;
 import com.example.healthcare.mapper.CustomModelMapping;
 import com.example.healthcare.repository.IRoleRepository;
-import com.example.healthcare.repository.IUserRepository;
+import com.example.healthcare.repository.IUsersRepository;
 import com.example.healthcare.repository.UserRoleRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -46,11 +46,13 @@ import com.github.fge.jsonpatch.JsonPatchException;
  */
 @Service
 
-public class UserService implements IUserService,UserDetailsService {
+public class UserService implements IUserService,UserDetailsService{
 
 	/** The user repository. */
+	
+	
 	@Autowired
-	private IUserRepository userRepository;
+	private IUsersRepository userRepository;
 	
 	@Autowired
 	private IRoleRepository roleRepository;
@@ -148,24 +150,39 @@ public class UserService implements IUserService,UserDetailsService {
 	 * @param userId the user id
 	 * @return the user by id
 	 */
-	@Override
-	@Transactional
-	public Optional<UserAndRoleDto> getUserById(Integer userId) {
-		System.out.println("Method1");
-		logger.info("userId:{}",userId);
-		UserAndRoleDto userAndRoleDto;
-		
-		logger.info("{}",userRepository.findById(userId).get());
-		
-		
-		userAndRoleDto = modelMapper.map(userRepository.findById(userId).get(), UserAndRoleDto.class);
-		
-		System.out.println(userAndRoleDto.toString());
-		return Optional.ofNullable(userAndRoleDto);
-		
-		
-		
-	}
+	
+
+	  
+	  @Transactional
+	  public Optional<UserAndRoleDto> getUserById(Integer userId) {
+	  System.out.println("Method1");
+	  logger.info("userId:{}",userId);
+	  UserAndRoleDto userAndRoleDto;
+	  
+	  logger.info("{}",userRepository.findById(userId).get());
+	  
+	  
+	  userAndRoleDto = modelMapper.map(userRepository.findById(userId).get(),
+	  UserAndRoleDto.class);
+	  
+	  System.out.println(userAndRoleDto.toString()); return
+	  Optional.ofNullable(userAndRoleDto);
+	  
+	  
+	  
+	  }
+	 
+	
+	/*
+	 * public UserAndRoleDto getUserById(Integer userId) { UserAndRoleDto
+	 * userAndRoleDto;
+	 * userAndRoleDto=modelMapper.map(userRepository.findById(userId).get(),
+	 * UserAndRoleDto.class); Optional<UserAndRoleDto>
+	 * userAndRole=Optional.ofNullable(userAndRoleDto) ; if(userAndRole.isPresent())
+	 * { return userAndRoleDto; } return null;
+	 * 
+	 * }
+	 */
 	
 	@Transactional
 	public Optional<UserAndRoleDto> findByUserName(String userName){

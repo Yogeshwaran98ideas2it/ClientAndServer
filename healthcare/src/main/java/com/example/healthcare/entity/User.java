@@ -1,17 +1,14 @@
 package com.example.healthcare.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -41,7 +38,23 @@ import lombok.Data;
 @Table(name="user")
 @EntityListeners(AuditingEntityListener.class)
 @NamedQueries({@NamedQuery(name="User.findByName",query="from User where userName=?1"),@NamedQuery(name="User.findByUserAccess",query="from User where access=?1")})
+
 public class User implements UserDetails{
+
+	/**
+	 * 
+	 */
+	
+
+	/**
+	 * 
+	 */
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3565467283407099501L;
 
 	/** The user id. */
 	@Id

@@ -39,7 +39,7 @@ public interface IUserService {
 	 * @param id the id
 	 * @return the user by id
 	 */
-	public Optional<UserAndRoleDto> getUserById(Integer id);
+//	public Optional<UserAndRoleDto> getUserById(Integer id);
 
 	/**
 	 * Delete user by id.

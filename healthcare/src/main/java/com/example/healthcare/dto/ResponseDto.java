@@ -15,6 +15,11 @@ import lombok.Data;
 @Data
 public class ResponseDto  implements  Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5717005538658308677L;
+
 	/** The status. */
 	private String status;
 	

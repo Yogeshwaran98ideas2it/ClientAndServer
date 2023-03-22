@@ -1,6 +1,5 @@
 package com.example.healthcare.controller;
 
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,8 +31,11 @@ import com.example.healthcare.dto.ResponseDto;
 import com.example.healthcare.dto.RoleDto;
 import com.example.healthcare.dto.UserAndRoleDto;
 import com.example.healthcare.entity.AuthRequest;
+import com.example.healthcare.entity.User;
 import com.example.healthcare.jwt.JwtUtil;
-import com.example.healthcare.repository.IUserRepository;
+
+import com.example.healthcare.repository.IUsersRepository;
+import com.example.healthcare.service.UserCacheService;
 import com.example.healthcare.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -50,14 +55,25 @@ import jakarta.validation.Valid;
 @RefreshScope
 
 @RequestMapping("users")
-public class UserController {
+@EnableCaching
+public class UserController  {
+
+	/**
+	 * 
+	 */
+	
 
 	/** The user service. */
 	@Autowired
 	UserService userService;
 	
 	@Autowired
-	IUserRepository userRepository;
+	IUsersRepository userRepository;
+	
+
+	
+	@Autowired
+	UserCacheService UserCacheService;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -80,6 +96,7 @@ public class UserController {
 	 * @return the all user
 	 */
 	@GetMapping
+	@CacheEvict(value="users",allEntries = true)
 	public ResponseDto getAllUser() {
 		List<UserAndRoleDto> userAndRoleDto = userService.getAllUser();
 		logger.info( "Value is {}", value);
@@ -111,6 +128,7 @@ public class UserController {
 	 * @return the page
 	 */
 	@GetMapping("/{pageNo}/{pageSize}")
+	@Cacheable(value="pages",key= "{#p0,#p1,#p2}")
 	public Page<UserAndRoleDto> listPageable(@PathVariable int pageNo, @PathVariable int pageSize) {
 		return userService.listPage(pageNo, pageSize);
 
@@ -122,22 +140,34 @@ public class UserController {
 	 * @param id the id
 	 * @return the user by id
 	 */
-	@GetMapping("/{id}")
-	@Cacheable(value="User",key="#id")
-	public ResponseDto getUserById(@PathVariable Integer id) {
-		Optional<UserAndRoleDto> userAndRoleDto = userService.getUserById(id);
-		ResponseDto response = new ResponseDto();
-		if (!userAndRoleDto.isEmpty()) {
-			response.setSuccess(userAndRoleDto, "User retrieved Successfully");
-		}
-		else {
-			response.setFailure("User id not available", "User value not retrieved ");
-		}
-		System.out.println("error2");
-		return response;
-	}
+	
+	  @GetMapping("/{id}")
+	  @Cacheable(key="#id",value="Individualuser") 
+	  public ResponseDto  getUserById(@PathVariable Integer id) { Optional<UserAndRoleDto>
+	  userAndRoleDto = userService.getUserById(id); ResponseDto response = new
+	  ResponseDto(); if (!userAndRoleDto.isEmpty()) {
+	  response.setSuccess(userAndRoleDto, "User retrieved Successfully"); } else {
+	  response.setFailure("User id not available", "User value not retrieved "); }
+	  System.out.println("error2");
+	  return response; }
+	 
+	
+	/*
+	 * @GetMapping("/{id}")
+	 * 
+	 * @Cacheable(key="#id",value="Individualuser") public ResponseDto
+	 * getUserById(@PathVariable Integer id) { UserAndRoleDto userAndRoleDto=new
+	 * UserAndRoleDto(); userAndRoleDto=userService.getUserById(id); ResponseDto
+	 * response=new ResponseDto(); if(userAndRoleDto!=null) {
+	 * response.setSuccess(userAndRoleDto, "User retrieved Successfully"); } else {
+	 * response.setFailure("User id not available", "User value not retrieved "); }
+	 * return response;
+	 * 
+	 * }
+	 */
 	
 	@GetMapping("/name")
+	@Cacheable(key="#userName",value = "IndividualUserName")
 	public ResponseDto findByName(@RequestParam(value = "userName") String userName) {
 		logger.info("inside name method");
 		Optional<UserAndRoleDto> userAndRoleDto=userService.findByUserName(userName);
@@ -152,6 +182,7 @@ public class UserController {
 	
 	
 	@GetMapping("/role")
+	@Cacheable(key="#userName",value = "IndividualRoleName")
 	public ResponseDto findByRoleName(@RequestParam(value = "roleName") String roleName) {
 		logger.info("inside name method");
 		Optional<RoleDto> roleDto=userService.findByRoleName(roleName);
@@ -164,6 +195,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/access")
+	@Cacheable(key="#access",value="UserAccess")
 	public ResponseDto findByUserAccess(@RequestParam(value = "access") String access) {
 		logger.info("inside name method");
 		List<UserAndRoleDto> userAndRoleDto=userService.findByUserAccess(access);
@@ -175,8 +207,9 @@ public class UserController {
 		
 	}
 	@GetMapping("/timing")
+	@Cacheable(key="#timing",value="UserTiming")
 	public ResponseDto findByUserTiming(@RequestParam(value = "timing") String timing) {
-		SecureRandom random =new SecureRandom();
+		
 		logger.info("inside name method");
 		List<RoleDto> userAndRoleDto=userService.findByUserTiming(timing);
 		ResponseDto response = new ResponseDto();
@@ -194,6 +227,7 @@ public class UserController {
 	 * @param userAndRoleDto the user and role dto
 	 */
 	@PostMapping
+	
 	public void createUser(@Valid @RequestBody UserAndRoleDto userAndRoleDto) {
 		userService.createUser(userAndRoleDto);
 	}
@@ -215,6 +249,7 @@ public class UserController {
 	 * @param id             the id
 	 */
 	@PutMapping("/{id}")
+	@CachePut(value = "UserId",key="#id")
 	public void updateUserById(@Valid @RequestBody UserAndRoleDto userAndRoleDto, @PathVariable Integer id) {
 		userService.updateUserById(userAndRoleDto, id);
 
@@ -255,5 +290,23 @@ public class UserController {
 		return jwtUtil.generateToken(authRequest.getUserName());
 		
 	}
+	
+	@PostMapping("/cache")
+	public UserAndRoleDto createUserCache(@RequestBody UserAndRoleDto user) {
+		
+		return UserCacheService.save(user);	
+	}
+	
+	@GetMapping("/cache/{id}")
+	public UserAndRoleDto findById(@PathVariable int id) {
+		
+		return UserCacheService.findById(id);
+	}
+	
+	@GetMapping("/cache")
+	public List<UserAndRoleDto> findAll(){
+		return UserCacheService.findAll();
+	}
+	
 
 }
