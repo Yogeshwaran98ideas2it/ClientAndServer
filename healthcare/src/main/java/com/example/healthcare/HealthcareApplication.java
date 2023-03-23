@@ -19,7 +19,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
  */
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableCaching
+
 
 
 public class HealthcareApplication {

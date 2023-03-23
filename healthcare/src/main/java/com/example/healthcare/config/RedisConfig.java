@@ -12,18 +12,27 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.stereotype.Component;
 
 import com.example.healthcare.dto.UserAndRoleDto;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Yogesh
+ * The Class RedisConfig.
  *
+ * @author Yogesh
  */
 @Configuration
+
 @EnableRedisRepositories
-@EnableJpaRepositories
+
 public class RedisConfig {
 
+	/**
+	 * Jedis connection factory.
+	 *
+	 * @return the jedis connection factory
+	 */
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -37,8 +46,14 @@ public class RedisConfig {
 
 	}
 
+	
+	/**
+	 * Redis template.
+	 *
+	 * @return the redis template
+	 */
 	@Bean
-	RedisTemplate<String, Object> redisTemplate() {
+	public RedisTemplate<String, Object> redisTemplate() {
 		RedisTemplate<String, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(jedisConnectionFactory());
 		template.setKeySerializer(new StringRedisSerializer());

@@ -2,6 +2,8 @@ package com.example.healthcare.dto;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Repository;
+
 import lombok.Data;
 
 
@@ -13,6 +15,7 @@ import lombok.Data;
  *
  */
 @Data
+@Repository
 public class ResponseDto  implements  Serializable{
 
 	/**

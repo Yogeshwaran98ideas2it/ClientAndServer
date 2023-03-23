@@ -3,6 +3,8 @@ package com.example.healthcare.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -16,7 +18,7 @@ import lombok.Data;
  *
  */
 @Data
-
+@RedisHash("User")//used as a name for caching when getting values from api
 public class UserAndRoleDto implements Serializable{
 
 	/**
