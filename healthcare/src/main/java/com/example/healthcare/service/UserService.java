@@ -1,5 +1,6 @@
 package com.example.healthcare.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +47,13 @@ import com.github.fge.jsonpatch.JsonPatchException;
  *
  */
 @Service
+@Repository
+public class UserService implements IUserService,UserDetailsService,Serializable{
 
-public class UserService implements IUserService,UserDetailsService{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6291985090139938374L;
 
 	/** The user repository. */
 	

@@ -50,8 +50,9 @@ public class SecureConfig {
 			"/users/access",
 			"/users/timing",
 			"/users/role",
-			"/users/name?userName=",
-			"/users/{pageNo}/{pageSize}"
+			"/users/name",
+			"/users/{pageNo}/{pageSize}",
+			"/v3/api-docs"
 		
 	};
 	

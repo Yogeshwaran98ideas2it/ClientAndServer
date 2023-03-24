@@ -1,5 +1,6 @@
 package com.example.healthcare.controller;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +32,7 @@ import com.example.healthcare.dto.ResponseDto;
 import com.example.healthcare.dto.RoleDto;
 import com.example.healthcare.dto.UserAndRoleDto;
 import com.example.healthcare.entity.AuthRequest;
-import com.example.healthcare.entity.User;
 import com.example.healthcare.jwt.JwtUtil;
-
 import com.example.healthcare.repository.IUsersRepository;
 import com.example.healthcare.service.UserCacheService;
 import com.example.healthcare.service.UserService;
@@ -41,6 +40,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 /**
@@ -56,12 +57,17 @@ import jakarta.validation.Valid;
 
 @RequestMapping("users")
 @EnableCaching
-public class UserController  {
+public class UserController implements Serializable {
 
 	/**
 	 * 
 	 */
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6907974600261793052L;
 
 	/** The user service. */
 	@Autowired
@@ -167,7 +173,7 @@ public class UserController  {
 	 */
 	
 	@GetMapping("/name")
-	@Cacheable(key="#userName",value = "IndividualUserName")
+	@CacheEvict(value="users",allEntries = true)
 	public ResponseDto findByName(@RequestParam(value = "userName") String userName) {
 		logger.info("inside name method");
 		Optional<UserAndRoleDto> userAndRoleDto=userService.findByUserName(userName);
@@ -182,7 +188,7 @@ public class UserController  {
 	
 	
 	@GetMapping("/role")
-	@Cacheable(key="#userName",value = "IndividualRoleName")
+	@CacheEvict(value="users",allEntries = true)
 	public ResponseDto findByRoleName(@RequestParam(value = "roleName") String roleName) {
 		logger.info("inside name method");
 		Optional<RoleDto> roleDto=userService.findByRoleName(roleName);
@@ -195,7 +201,7 @@ public class UserController  {
 	}
 	
 	@GetMapping("/access")
-	@Cacheable(key="#access",value="UserAccess")
+	@CacheEvict(value="users",allEntries = true)
 	public ResponseDto findByUserAccess(@RequestParam(value = "access") String access) {
 		logger.info("inside name method");
 		List<UserAndRoleDto> userAndRoleDto=userService.findByUserAccess(access);
@@ -207,7 +213,7 @@ public class UserController  {
 		
 	}
 	@GetMapping("/timing")
-	@Cacheable(key="#timing",value="UserTiming")
+	@CacheEvict(value="users",allEntries = true)
 	public ResponseDto findByUserTiming(@RequestParam(value = "timing") String timing) {
 		
 		logger.info("inside name method");

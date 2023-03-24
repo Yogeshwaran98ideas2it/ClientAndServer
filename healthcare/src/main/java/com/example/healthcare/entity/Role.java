@@ -1,5 +1,7 @@
 package com.example.healthcare.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ import lombok.Data;
 @Entity
 @Table(name = "role")
 @NamedQuery(name="Role.findByName",query="from Role where roleName=?1")
-public class Role {
+public class Role implements Serializable{
 
 	/** The role id. */
 	@Id

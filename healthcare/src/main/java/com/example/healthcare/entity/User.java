@@ -39,7 +39,7 @@ import lombok.Data;
 @EntityListeners(AuditingEntityListener.class)
 @NamedQueries({@NamedQuery(name="User.findByName",query="from User where userName=?1"),@NamedQuery(name="User.findByUserAccess",query="from User where access=?1")})
 
-public class User implements UserDetails{
+public class User implements UserDetails,Serializable{
 
 	/**
 	 * 
