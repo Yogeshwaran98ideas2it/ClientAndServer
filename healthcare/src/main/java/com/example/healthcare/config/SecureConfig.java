@@ -44,6 +44,7 @@ public class SecureConfig {
 			
 			"/users",
 			
+			
 		
 			"/users/{id}",
 			"/users/access",
@@ -54,7 +55,7 @@ public class SecureConfig {
 		
 	};
 	
-	public final String[] allowedApi1= {
+	public final String[] allowedPublicApi= {
 		
 			"/users/authenticate",
 			"/v3/api-docs/**",
@@ -107,12 +108,12 @@ public class SecureConfig {
 		.disable()
 		
 		.authorizeHttpRequests()
-		.requestMatchers("/users/authenticate")
+		.requestMatchers(allowedPublicApi)
 		.permitAll()
-		.requestMatchers("/users/v3/api-docs")
-		.permitAll()
-		.requestMatchers("/v3/api-docs/**")
-		.permitAll()
+//		.requestMatchers("/users/v3/api-docs")
+//		.permitAll()
+//		.requestMatchers("/v3/api-docs/**")
+//		.permitAll()
 		
 		
 		
