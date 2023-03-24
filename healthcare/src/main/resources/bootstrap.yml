@@ -11,7 +11,7 @@ spring:
       port: 8200
       scheme: http
       authentication: TOKEN
-      token: hvs.WY9IOyaKyint1jMBF7twUYqU
+      token: hvs.jTyHkG4oigY8MfYpd3QFokkD
 #  data:    
 #   redis:
 #    host: localhost
