@@ -50,7 +50,7 @@ public class SecureConfig {
 			"/users/access",
 			"/users/timing",
 			"/users/role",
-			"/users/name",
+			"/users/name?userName=",
 			"/users/{pageNo}/{pageSize}"
 		
 	};
@@ -60,6 +60,8 @@ public class SecureConfig {
 			"/users/authenticate",
 			"/v3/api-docs/**",
 			"/v3/api-docs",
+			"/swagger.json",
+			"/swagger-resources/**",
 			"/swagger-ui.html",
 			"/api-docs.yaml",
 			"/swagger-ui/**"
@@ -121,7 +123,7 @@ public class SecureConfig {
 //		.permitAll()
 		.requestMatchers(allowedApi)
 //		.permitAll()
-		.hasAnyAuthority("Engineer","Nurse")
+		.hasAnyAuthority("Engineer","Nurse","HR")
 		.anyRequest()
 		.authenticated()
 		.and()
