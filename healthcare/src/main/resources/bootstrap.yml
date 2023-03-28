@@ -11,7 +11,7 @@ spring:
       port: 8200
       scheme: http
       authentication: TOKEN
-      token: hvs.jTyHkG4oigY8MfYpd3QFokkD
+      token: hvs.tnf4J7WFIrHhgXciVUpMAVZO
 #  data:    
 #   redis:
 #    host: localhost
@@ -26,4 +26,13 @@ management:
     web:
       exposure:
         include: "*"
+    
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  paths-to-match: /*
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
        

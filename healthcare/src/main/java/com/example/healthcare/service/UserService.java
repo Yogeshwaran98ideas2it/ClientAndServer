@@ -375,6 +375,7 @@ public class UserService implements IUserService,UserDetailsService,Serializable
 		
 		logger.info("userName:{}",userName);
 		logger.info("password:{}",passWord);
+		//Adding authority based in roles
 		final List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
 		return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authorities);

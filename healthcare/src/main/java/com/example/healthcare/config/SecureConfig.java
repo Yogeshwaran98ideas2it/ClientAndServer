@@ -22,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.example.healthcare.jwt.JwtFilter;
 import com.example.healthcare.service.UserService;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 /**
  * @author Yogesh
  *
@@ -52,21 +54,40 @@ public class SecureConfig {
 			"/users/role",
 			"/users/name",
 			"/users/{pageNo}/{pageSize}",
-			"/v3/api-docs"
+			"/users/authenticate",
+			"/v3/api-docs/**",
+			"/v3/**",
+			"/configuration/**",
+			"/swagger*/**",
+			"/swagger.json",
+			"/swagger-resources/**",
+			"/swagger-ui.html/**",
+			"/v3/api-docs.html",
+			"/swagger-ui/**",
+			"/webjars/**",
+			"/v3/api-docs",
+			"/api/auth/**"
 		
 	};
 	
-	public final String[] allowedPublicApi= {
-		
-			"/users/authenticate",
-			"/v3/api-docs/**",
-			"/v3/api-docs",
-			"/swagger.json",
-			"/swagger-resources/**",
-			"/swagger-ui.html",
-			"/api-docs.yaml",
-			"/swagger-ui/**"
-	};
+//	public final String[] allowedPublicApi= {
+//		
+//			"/users/authenticate",
+//			"/v3/api-docs/**",
+//			"/v3/**",
+//			"/configuration/**",
+//			"/swagger*/**",
+//			"/swagger.json",
+//			"/swagger-resources/**",
+//			"/swagger-ui.html/**",
+//			"/v3/api-docs.html",
+//			"/swagger-ui/**",
+//			"/webjars/**",
+//			"/v3/api-docs",
+//			"/api/auth/**"
+//			
+//			
+//	};
 	
 	
 
@@ -105,14 +126,16 @@ public class SecureConfig {
 	  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 		.cors()
-		.disable()
+		.and()
+//		.disable()
 		
 		.csrf()
 		.disable()
+//		.and()
 		
 		.authorizeHttpRequests()
-		.requestMatchers(allowedPublicApi)
-		.permitAll()
+//		.requestMatchers(allowedPublicApi)
+//		.permitAll()
 //		.requestMatchers("/users/v3/api-docs")
 //		.permitAll()
 //		.requestMatchers("/v3/api-docs/**")

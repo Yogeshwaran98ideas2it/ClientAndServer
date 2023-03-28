@@ -57,6 +57,8 @@ import jakarta.validation.Valid;
 
 @RequestMapping("users")
 @EnableCaching
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "User", description = "The User API. Contains all the operations that can be performed on a user.")
 public class UserController implements Serializable {
 
 	/**
